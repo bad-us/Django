@@ -62,15 +62,3 @@ def products(request):
     return render(request, 'products/products.html', context)
 
 
-# def test_context(request):
-#     context = {
-#         'title': 'Geekshop',
-#         'header': 'Hello people!',
-#         'username': 'Bad',
-#         'products': [
-#             {'name': 'Hudi Addidas', 'price': 5100},
-#             {'name': 'Jacket Black', 'price': 4500},
-#             {'name': 'Pants Nike', 'price': 7100},
-#         ]
-#     }
-#     return render(request, 'products/test_context.html', context)
