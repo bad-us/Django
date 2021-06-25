@@ -7,8 +7,6 @@ from baskets.models import Basket
 from django.contrib.auth.decorators import login_required
 
 
-
-
 # Create your views here.
 
 def login(request):
@@ -48,9 +46,11 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+
 @login_required
 def profile(request):
-    user=request.user
+    global total_quantity, total_sum, baskets
+    user = request.user
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
         if form.is_valid():
@@ -60,5 +60,22 @@ def profile(request):
             print(form.errors)
     else:
         form = UserProfileForm(instance=user)
-    context = {'title': 'Profile Users', 'form': form, 'baskets': Basket.objects.filter(user=user)}
+        # Первый способ самый простой
+        # total_quantity = 0
+        # total_sum = 0
+        # for basket in baskets:
+            # total_quantity += basket.quantity
+            # total_sum += basket.sum()
+
+        # Второй способ _1
+        # baskets = Basket.objects.filter(user=user)
+        # total_quantity = sum(basket.quantity for basket in baskets)
+        # total_sum = sum(basket.sum() for basket in baskets)
+    context = {'title': 'Profile Users',
+               'form': form,
+               'baskets': Basket.objects.filter(user=user),
+               # 'total_quantity': sum(basket.quantity for basket in baskets),# Способ 2 полный
+               # 'total_sum': sum(basket.sum() for basket in baskets),
+
+               }
     return render(request, 'users/profile.html', context)
